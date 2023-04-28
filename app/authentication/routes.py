@@ -6,10 +6,6 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 # imports for flask login
 from flask_login import login_user, logout_user, LoginManager, current_user, login_required
 
-# from flask_oauth import OAuth
-
-# oauth = OAuth()
-# car_app = oauth.remote_app('car_app')
 auth = Blueprint('auth', __name__, template_folder='auth_templates')
 
 @auth.route('/signup', methods = ['GET', 'POST'])
