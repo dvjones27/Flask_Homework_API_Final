@@ -61,7 +61,7 @@ def update_car(current_user_token, id):
     response = car_schema.dump(car)
     return jsonify(response)
 
-@api.route('/cars/<id>', methods = ['DELETE'])
+@api.route('/delete_car/<id>', methods = ['DELETE'])
 @token_required
 def delete_car(current_user_token, id):
     car = Car.query.get(id)
