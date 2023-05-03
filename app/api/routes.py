@@ -15,7 +15,7 @@ def create_car(current_user_token):
     user_id = User.query.get(current_user_token.id)
     
     
-    car = Car(vin, make, model, year, color, user_id = user_id)
+    car = Car(vin=vin, make=make, model=model, year=year, color=color, user_id = user_id)
 
     db.session.add(car)
     db.session.commit()
@@ -61,7 +61,7 @@ def update_car(current_user_token, id):
     response = car_schema.dump(car)
     return jsonify(response)
 
-@api.route('/delete_car/<id>', methods = ['DELETE'])
+@api.route('/cars/<id>', methods = ['DELETE'])
 @token_required
 def delete_car(current_user_token, id):
     car = Car.query.get(id)

@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, render_template, request, redirect, url_for
 from models import db, User, Car, car_schema, cars_schema
-from flask_login import current_user
+from flask_login import current_user, login_required
 
 
 site = Blueprint('site', __name__,template_folder='site_templates')
@@ -14,15 +14,18 @@ def profile():
     return render_template('profile.html')
 
 @site.route('/cars')
+@login_required
 def cars():
     cars = Car.query.all()
     return render_template('cars.html', cars=cars)
 
 @site.route('/update')
+@login_required
 def update():
     return render_template('update.html')
 
 @site.route('/create_car', methods=['POST'])
+@login_required
 def create_car():
     vin = request.form['vin']
     year = request.form['year']
@@ -38,7 +41,8 @@ def create_car():
     return redirect(url_for('site.cars'))
 
 
-@site.route('/update_car/<id>/edit', methods=['POST', 'PUT'])
+@site.route('/update_car/<id>', methods=['POST', 'PUT'])
+@login_required
 def update_car(id):
     # car = Car.query.get(id)
     vin = Car.query.filter_by(id=id).first()
@@ -64,7 +68,8 @@ def update_car(id):
     return render_template('update.html', car=car)
     
 
-@site.route('/delete_car/<id>', methods=['POST'])
+@site.route('/delete_car/<id>', methods=['POST, GET'])
+@login_required
 def delete_car(id):
     car = Car.query.get(id)
     if car:
