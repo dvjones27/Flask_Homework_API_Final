@@ -12,10 +12,10 @@ def create_car(current_user_token):
     model = request.json['model']
     year = request.json['year']
     color = request.json['color']
-    user_token = User.query.get(current_user_token.token)
+    user_id = User.query.get(current_user_token.id)
     
     
-    car = Car(vin, make, model, year, color, user_token = user_token)
+    car = Car(vin, make, model, year, color, user_id = user.id)
 
     db.session.add(car)
     db.session.commit()
@@ -28,8 +28,8 @@ def create_car(current_user_token):
 @api.route('/cars', methods = ['GET'])
 @token_required
 def get_cars(current_user_token):
-    user_car = current_user_token.token
-    cars = Car.query.filter_by(user_token = user_car).all()
+    user_id = current_user_token.id
+    cars = Car.query.filter_by(user_id = user_id).all()
     response = cars_schema.dump(cars)
     return jsonify(response)
 
@@ -37,7 +37,7 @@ def get_cars(current_user_token):
 @api.route('/cars/<id>', methods = ['GET'])
 @token_required
 def get_single_car(current_user_token, id):
-    car_Token = current_user_token.id
+    car_Token = current_user_token.token
     if car_Token == current_user_token.id:
         car = Car.query.get(id)
         response = car_schema.dump(car)
@@ -55,7 +55,7 @@ def update_car(current_user_token, id):
     car.model = request.json['model']
     car.year = request.json['year']
     car.color = request.json['color']
-    car.user_token = current_user_token.token
+    car.user_id = current_user_token.id
 
     db.session.commit()
     response = car_schema.dump(car)
